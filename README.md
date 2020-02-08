@@ -67,9 +67,66 @@ public class HelloServlet extends HttpServlet {
 
 ```
 
+### SpringMVC的实现方式
 
+#### 基于配置(太多配置)
 
+#### 基于注解
 
+1. 配置web.xml
+
+2. 配置spring-mvc.xml
+
+   共四个需要添加的东西
+
+   1. 扫描对应的controller, IOC生效
+   2. 注解生效
+   3. 不处理静态资源
+   4. 视图解析器
+
+   ```xml
+   <?xml version="1.0" encoding="UTF-8"?>
+   <beans xmlns="http://www.springframework.org/schema/beans"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xmlns:context="http://www.springframework.org/schema/context"
+          xmlns:mvc="http://www.springframework.org/schema/mvc"
+          xsi:schemaLocation="http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd">
+   
+       <!--    1. 使得IOC注解生效
+               2. 静态资源过滤: HMTL...
+               3. MVC的注解驱动
+               4. 配置视图解析器-->
+       <context:component-scan base-package="com.wkkk.controller"/>
+       <!--使得SpringMVC不处理静态资源-->
+       <mvc:default-servlet-handler/>
+       <!--
+      支持mvc注解驱动
+          在spring中一般采用@RequestMapping注解来完成映射关系
+          要想使@RequestMapping注解生效
+          必须向上下文中注册DefaultAnnotationHandlerMapping
+          和一个AnnotationMethodHandlerAdapter实例
+          这两个实例分别在类级别和方法级别处理。
+          而annotation-driven配置帮助我们自动完成上述两个实例的注入。
+       -->
+       <mvc:annotation-driven/>
+   
+   
+       <!-- 视图解析器 -->
+       <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+             id="internalResourceViewResolver">
+           <!-- 前缀 -->
+           <property name="prefix" value="/WEB-INF/jsp/"/>
+           <!-- 后缀 -->
+           <property name="suffix" value=".jsp"/>
+       </bean>
+   </beans>
+   
+   ```
+
+   
+
+3. 使用注解编写从controller
 
 
 
